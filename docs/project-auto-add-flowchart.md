@@ -1,6 +1,6 @@
 # Task Threads - Priority Stack Ranking: Auto-Add Issue Flows
 
-> **Last Updated:** February 28, 2026
+> **Last Updated:** February 28, 2026 (Spec 100: added EQUAStart/equabot via Method 2)
 >
 > This document maps how issues from all connected repositories automatically flow into the
 > [Task Threads - Priority Stack Ranking](https://github.com/orgs/Balancing-Rock/projects/4) project.
@@ -37,6 +37,7 @@ flowchart TD
         R6[(task-threads)]
         R7[(demo-repository)]
         R8[(Speed-Reader-App)]
+        R9[("EQUAStart/equabot\n(cross-org)")]
     end
 
     R1 -->|"new/updated issue"| W1
@@ -48,6 +49,7 @@ flowchart TD
     R6 -->|"issue opened"| A1
     R7 -->|"issue opened"| A1
     R8 -->|"issue opened"| A1
+    R9 -->|"issue opened/transferred/reopened"| A1
 
     W1 --> BOARD
     W2 --> BOARD
@@ -77,13 +79,14 @@ flowchart TD
 
 **Limit:** GitHub Team plan supports max 5 auto-add workflows per project.
 
-### Method 2: GitHub Actions (3 repos)
+### Method 2: GitHub Actions (4 repos)
 
 | Repository | Workflow File | Trigger | Auth |
 |---|---|---|---|
 | `task-threads` | `.github/workflows/auto-add-to-project.yml` | `issues: [opened]` | `ADD_TO_PROJECT_PAT` org secret |
 | `demo-repository` | `.github/workflows/auto-add-to-project.yml` | `issues: [opened]` | `ADD_TO_PROJECT_PAT` org secret |
 | `Speed-Reader-App` | `.github/workflows/auto-add-to-project.yml` | `issues: [opened]` | `ADD_TO_PROJECT_PAT` org secret |
+| `EQUAStart/equabot` | `.github/workflows/auto-add-to-project.yml` | `issues: [opened, transferred, reopened]` | `ADD_TO_PROJECT_PAT` repo secret (cross-org) |
 
 **Action used:** `actions/add-to-project@v1.0.2`
 
@@ -98,3 +101,4 @@ flowchart TD
 - **Org Secret:** `ADD_TO_PROJECT_PAT` (classic PAT with `repo` + `project` scopes)
 - **Visibility:** All private repositories in the Balancing-Rock org
 - **Expiration:** No expiration (monitor and rotate as needed)
+- **Cross-org note:** `EQUAStart/equabot` uses a separate repo-level secret with the same name (`ADD_TO_PROJECT_PAT`), since org secrets from Balancing-Rock are not inherited by repos in the EQUAStart org. The PAT itself is scoped to the user account and covers both orgs.
