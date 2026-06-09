@@ -1,0 +1,7 @@
+{
+  "recommended_comet_tool": {
+    "justification": "No extracted skill descriptions contained primary/default; selected the first catalog entry alphabetically by Skill ID.",
+    "primary": "15-comet-review",
+    "selection_method": "alphabetical_by_skill_id"
+  }
+}
